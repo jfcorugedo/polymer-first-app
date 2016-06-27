@@ -1,0 +1,180 @@
+
+<link href="../elements/todo-element.html" rel="import">
+<link href="../bower_components/polymer/polymer.html" rel="import">
+<link href="../bower_components/paper-drawer-panel/paper-drawer-panel.html" rel="import">
+<link href="../bower_components/paper-header-panel/paper-header-panel.html" rel="import">
+<link href="../bower_components/paper-toolbar/paper-toolbar.html" rel="import">
+<link href="../bower_components/paper-icon-button/paper-icon-button.html" rel="import">
+<link href="../bower_components/paper-material/paper-material.html" rel="import">
+<link href="../bower_components/paper-menu/paper-menu.html" rel="import">
+<link href="../bower_components/paper-item/paper-item.html" rel="import">
+<link href="../bower_components/paper-input/paper-input.html" rel="import">
+<link href="../bower_components/iron-icons/iron-icons.html" rel="import">
+
+<dom-module id="todo-app">
+
+    <template>
+        <style>
+            .list {
+                padding: 0;
+                /* 		border-right: 1px solid #ccc; */
+            }
+
+            .list paper-item {
+                min-height: 80px;
+                border-bottom: 1px solid #dedede;
+                background-color: #fafafa;
+            }
+
+            #todoEntry {
+                margin: 0;
+                width: 100%;
+                max-width: none;
+                border-bottom: 1px solid #ccc;
+            }
+
+            paper-input {
+                margin: 0 4vw;
+                padding: 0;
+            }
+
+            paper-material {
+                background-color: #fff;
+                max-width: 640px;
+                width: 95%;
+                margin: 25px auto;
+                position: relative;
+            }
+
+            #todos {
+                overflow-y: scroll;
+                height: 66vh;
+            }
+            #todos {
+                overflow-y: scroll;
+            }
+
+            paper-fab {
+                position: absolute;
+                background: #00BCD4;
+                bottom: 2vh;
+                right: 2vw;
+            }
+            .main-panel {
+                background-color: #eee;
+                height: 100vh;
+                overflow-y: hidden;
+            }
+
+            .task-empty paper-item {
+                text-align: center;
+                padding: 25px;
+                color: #6f6f6f;
+            }
+            paper-toolbar {
+                background:#D32F2F;
+            }
+
+            #made-with {
+                width:100%;
+                margin:0;
+                position: fixed;
+                bottom: 0;
+                text-align: center;
+            }
+
+            #made-with img {
+                width: 35%;
+                padding: 10px;
+            }
+        </style>
+
+        <paper-drawer-panel>
+            <paper-header-panel drawer>
+                <paper-toolbar>
+                    <paper-item>Completed tasks</paper-item>
+                </paper-toolbar>
+                <paper-menu class="list">
+                    <template is="dom-if" if="{{!done.length}}">
+                        <paper-material>
+                            <paper-item>Completed tasks will appear here!!</paper-item>
+                        </paper-material>
+                    </template>
+                    <template id="done" is="dom-repeat" items="{{done}}">
+                        <paper-item>{{item.task}}<i style="margin-left: 5px;">{{item.user}}</i></paper-item>
+                    </template>
+                </paper-menu>
+            </paper-header-panel>
+            <paper-header-panel main>
+                <paper-toolbar>
+                    <paper-item>Main Body Title</paper-item>
+                </paper-toolbar>
+                <div style="border-left: 1px solid #ccc;">
+                    <paper-material id="todoEntry" eleation="2">
+                        <paper-input id="newTask" label="Task"></paper-input>
+                        <paper-input id="newUser" char-counter label="Username" maxlength="16"></paper-input>
+                        <paper-fab icon="icons:add" on-tap="postTask"></paper-fab>
+                    </paper-material>
+                    <div id="todos">
+                        <template is="dom-if" if="{{!todo.length}}">
+                            <paper-materia>
+                                <paper-item>No Tasks remain. Updates are Real-Time so stay tuned!</paper-item>
+                            </paper-materia>
+                        </template>
+                        <template id="tasks" is="dom-repeat" items="{{todo}}">
+                            <todo-element user="{{item.user}}" task="{{item.task}}" rid="{{item.rid}}"></todo-element>
+                        </template>
+                    </div>
+                </div>
+            </paper-header-panel>
+        </paper-drawer-panel>
+    </template>
+
+    <script>
+        Polymer({
+            is: "todo-app",
+            properties: {
+                todo: {
+                    type: Array,
+                    value: [{user:"Coder", task:"Learn Polymer", rid:0}]
+                },
+                done: {
+                    type: Array,
+                    value: []
+                }
+            },
+            postTask: function(e) { //Adds a new task
+                var task = this.$.newTask.value;
+                var user = this.$.newUser.value;
+                if(task === "") {
+                    alert("Task is Empty!!");
+                    return;
+                }
+                if(user === ""){
+                    user = "Anonymous";
+                }
+                this.$.newTask.value = "";
+            },
+            handleComplete: function(e) {
+                var index = findWithAttr(this.todo, 'rid', e.target.rid);
+                var itm = this.todo[idx];
+                itm.task = e.target.task;
+                itm.user = this.$.newUser.value;
+                itm.type = "done";
+            },
+            ready: function(e) {
+                this.addEventListener('complete', this.handleComplete);
+            }
+        });
+        function randID() {
+            return Math.floor(Math.random()*10000);
+        }
+        function findWithAttr(array, attr, value) {
+            for(var i = 0; i < array.length; i += 1) {
+                if(array[i][attr] === value) {
+                    return i;
+                }
+            }
+        }
+    </script>
+</dom-module>

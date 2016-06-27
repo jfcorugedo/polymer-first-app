@@ -2,12 +2,13 @@
   "scripts": {
     "init": "bower init",
     "bower_install": "bower install --save",
-    "start": "gulp serve"
+    "start": "polymer serve"
   },
   "engines": {
     "node": ">=0.10.0"
   },
   "devDependencies": {
-    "bower": "^1.7.9"
+    "bower": "^1.7.9",
+    "polymer-cli": "^0.11.1"
   }
 }
