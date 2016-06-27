@@ -1,10 +1,86 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
 
-</body>
-</html>
+<!-- Imports Polymer library and a custom component that will be used later.
+     More on HTML 5 import feature: http://www.html5rocks.com/en/tutorials/webcomponents/imports/
+-->
+<link href="../bower_components/polymer/polymer.html" rel="import">
+<link href="../bower_components/paper-checkbox/paper-checkbox.html" rel="import">
+<link href="../bower_components/paper-item/paper-item.html" rel="import">
+<link href="../bower_components/paper-input/paper-input.html" rel="import">
+<link href="../bower_components/paper-material/paper-material.html" rel="import">
+<link href="../bower_components/paper-fab/paper-fab.html" rel="import">
+<link href="../bower_components/iron-icons/iron-icons.html" rel="import">
+
+<!-- The <dom-module> tag wraps an element's local DOM definition.
+In this case, the id attribute shows that this module includes the
+local DOM for an element called todo-element. -->
+<dom-module id="todo-element">
+
+    <!--
+     The <template> actually defines the element's local DOM structure and styling.
+     This is where you'll add markup for your custom element.
+     More about Local DOM: https://www.polymer-project.org/1.0/docs/devguide/local-dom
+     -->
+    <template>
+        <!-- These styles don't affect the rest of the document, are local to this component -->
+        <style>
+
+        </style>
+
+        <paper-material class="todo" elevation="1">
+            <paper-checkbox checked="{{completed}}"></paper-checkbox>
+            <!-- paper-fab element used predefined icons. See all possibles icons here:
+                 http://kevingleason.me/Polymer-Todo/bower_components/iron-icons/demo/index.html
+            -->
+            <paper-fab hidden="{{editing}}" icon="icons:create" on-tap="doEdit" mini></paper-fab>
+            <paper-fab hidden="{{!editing}}" icon="icons:done" on-tap="doEdit" mini></paper-fab>
+            <paper-item hidden="{{editing}}" id="task">{{task}}</paper-item>
+            <paper-input id="edit" hidden="{{!editing}}" value="{{task}}"></paper-input>
+            <paper-item>Created by <span>{{user}}</span></paper-item>
+            <paper-item>{{time}}</paper-item>
+        </paper-material>
+    </template>
+
+    <script>
+        Polymer({
+            is: "todo-element",
+            properties: {
+                // properties element public API.
+                // To know more about element properties take a look at https://www.polymer-project.org/1.0/docs/devguide/properties
+
+                //The person who posted or completed a task
+                user: {
+                    type: String,
+                    value: ""
+                },
+                //The task that is being posted
+                task: {
+                    type: String,
+                    value: "Hello!"
+                },
+                //Random ID that will be used to coordinate tasks via PubNub
+                rid: {
+                    type: Number,
+                    value: -1
+                },
+                //The time of creation of this task
+                time: {
+                    type: String,
+                    value: new Date().toLocaleString()
+                },
+                //Whether or not the task is complete
+                completed: {
+                    type: Boolean,
+                    value: false,
+                    //This method will be invoked every time the value of this property changes
+                    observer: 'compChanged'
+                },
+                //Flag that indicates if the user is editing the task or not
+                editing: {
+                    type: Boolean,
+                    value: false
+                }
+            }
+        })
+    </script>
+
+</dom-module>
