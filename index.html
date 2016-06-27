@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="bower_components/webcomponentsjs/webcomponents-lite.js" />
+    <link href="elements/todo-app.html" rel="import" />
+    <title>My first TODO list using Polymer</title>
+</head>
+
+<!--
+    unresolved attribute ensures that no custom polymer elements display before Polymer is ready
+    fullbleed attribute ensures the entire body fits to the viewport
+
+    These attributes prevents FOUC: Flash or unstyled content
+-->
+<body fullbleed unresolved>
+    <todo-app></todo-app>
+</body>
+</html>
