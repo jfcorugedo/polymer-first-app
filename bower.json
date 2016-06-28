@@ -30,6 +30,7 @@
     "paper-item": "polymerelements/paper-item#^1.2.1",
     "paper-header-panel": "polymerelements/paper-header-panel#^1.1.6",
     "paper-toolbar": "polymerelements/paper-toolbar#^1.1.5",
-    "paper-icon-button": "polymerelements/paper-icon-button#^1.1.2"
+    "paper-icon-button": "polymerelements/paper-icon-button#^1.1.2",
+    "pubnub-element": "^4.0.1"
   }
 }

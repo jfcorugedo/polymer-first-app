@@ -10,6 +10,7 @@
 <link href="../bower_components/paper-item/paper-item.html" rel="import">
 <link href="../bower_components/paper-input/paper-input.html" rel="import">
 <link href="../bower_components/iron-icons/iron-icons.html" rel="import">
+<link href="../bower_components/pubnub-element/pubnub-element.html" rel="import">
 
 <dom-module id="todo-app">
 
@@ -128,6 +129,13 @@
                 </div>
             </paper-header-panel>
         </paper-drawer-panel>
+
+        <core-pubnub
+                publish_key="pub-c-e3bd6523-2663-4da9-b6cf-c1bfcbe9c87f"
+                subscribe_key="sub-c-3245448a-3ca9-11e6-bfbb-02ee2ddab7fe">
+            <core-pubnub-publish id="pub" channel="todo" message="Test"> </core-pubnub-publish>
+            <core-pubnub-subscribe id="sub" channel="todo" messages="{{messages}}" presence="{{present}}" on-callback="subscribeCallback"></core-pubnub-subscribe>
+        </core-pubnub>
     </template>
 
     <script>
@@ -139,6 +147,14 @@
                     value: [{user:"Coder", task:"Learn Polymer", rid:0}]
                 },
                 done: {
+                    type: Array,
+                    value: []
+                },
+                messages: {
+                    type: Array,
+                    value: []
+                },
+                present: {
                     type: Array,
                     value: []
                 }
@@ -154,16 +170,40 @@
                     user = "Anonymous";
                 }
                 this.$.newTask.value = "";
+
+                this.$.pub.message = { type:"todo", task:task, user:user, rid:randID() };
+                this.$.pub.publish();
             },
             handleComplete: function(e) {
+                console.log('task completed', e)
                 var index = findWithAttr(this.todo, 'rid', e.target.rid);
-                var itm = this.todo[idx];
+                var itm = this.todo[index];
                 itm.task = e.target.task;
                 itm.user = this.$.newUser.value;
                 itm.type = "done";
+
+                this.$.pub.message = itm;
+                this.$.pub.publish();
             },
-            ready: function(e) {
-                this.addEventListener('complete', this.handleComplete);
+            listeners: {
+                "task-completed": "handleComplete"
+            },
+            subscribeCallback: function(e){
+                while(this.messages.length > 0){ // Get all messages
+                    var item = this.messages.pop();
+                    switch(item.type){
+                        case "todo":
+                            this.unshift('todo', {task:item.task, user:item.user, rid:item.rid});
+                            break;
+                        case "done":
+                            var idx = findWithAttr(this.todo, 'rid',item.rid);
+                            var itm = this.splice('todo', idx, 1)[0];
+                            itm.task = item.task;
+                            itm.user = item.user;
+                            this.push('done',itm);
+                            break;
+                    }
+                }
             }
         });
         function randID() {

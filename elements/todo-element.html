@@ -118,12 +118,21 @@ local DOM for an element called todo-element. -->
                     type: Boolean,
                     value: false,
                     //This method will be invoked every time the value of this property changes
-                    observer: 'compChanged'
+                    notify: true
                 },
                 //Flag that indicates if the user is editing the task or not
                 editing: {
                     type: Boolean,
                     value: false
+                }
+            },
+            listeners: {
+                "completed-changed": "completedChanged"
+            },
+            completedChanged: function(e) {
+                console.log(e.detail.value);
+                if(e.detail.value) {
+                    this.fire("task-completed");
                 }
             }
         })
