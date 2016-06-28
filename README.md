@@ -4,7 +4,7 @@
 
 Example TODO list application using web components (Polymer 1.5.0 implementation).
 
-It uses the most recent version of Polymer and it follows all the recomendations made for this version.
+It is based on [this](https://scotch.io/tutorials/build-a-real-time-polymer-to-do-app) tutorial. However it uses newer Polymer features and fixes some mayor bugs present in the original application.
 
 In addition to Polymer, it uses [PubNub](https://www.pubnub.com/) asincronous system to dispatch tasks between all people connected.
 
