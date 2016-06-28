@@ -11,84 +11,13 @@
 <link href="../bower_components/paper-input/paper-input.html" rel="import">
 <link href="../bower_components/iron-icons/iron-icons.html" rel="import">
 <link href="../bower_components/pubnub-element/pubnub-element.html" rel="import">
+<link href="todo-app-css.html" rel="import" />
 
 <dom-module id="todo-app">
 
     <template>
-        <style>
-            .list {
-                padding: 0;
-                /* 		border-right: 1px solid #ccc; */
-            }
 
-            .list paper-item {
-                min-height: 80px;
-                border-bottom: 1px solid #dedede;
-                background-color: #fafafa;
-            }
-
-            #todoEntry {
-                margin: 0;
-                width: 100%;
-                max-width: none;
-                border-bottom: 1px solid #ccc;
-            }
-
-            paper-input {
-                margin: 0 4vw;
-                padding: 0;
-            }
-
-            paper-material {
-                background-color: #fff;
-                max-width: 640px;
-                width: 95%;
-                margin: 25px auto;
-                position: relative;
-            }
-
-            #todos {
-                overflow-y: scroll;
-                height: 66vh;
-            }
-            #todos {
-                overflow-y: scroll;
-            }
-
-            paper-fab {
-                position: absolute;
-                background: #00BCD4;
-                bottom: 2vh;
-                right: 2vw;
-            }
-            .main-panel {
-                background-color: #eee;
-                height: 100vh;
-                overflow-y: hidden;
-            }
-
-            .task-empty paper-item {
-                text-align: center;
-                padding: 25px;
-                color: #6f6f6f;
-            }
-            paper-toolbar {
-                background:#D32F2F;
-            }
-
-            #made-with {
-                width:100%;
-                margin:0;
-                position: fixed;
-                bottom: 0;
-                text-align: center;
-            }
-
-            #made-with img {
-                width: 35%;
-                padding: 10px;
-            }
-        </style>
+        <style include="todo-app-css"></style>
 
         <paper-drawer-panel>
             <paper-header-panel drawer>
@@ -200,6 +129,7 @@
                             var itm = this.splice('todo', idx, 1)[0];
                             itm.task = item.task;
                             itm.user = item.user;
+                            // Instead of using Array.push, use this to let Polymer know about this change
                             this.push('done',itm);
                             break;
                     }
