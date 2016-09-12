@@ -1,7 +1,6 @@
 {
   "scripts": {
-    "init": "bower init",
-    "bower_install": "bower install --save",
+    "postinstall": "bower install",
     "start": "polymer serve"
   },
   "engines": {
